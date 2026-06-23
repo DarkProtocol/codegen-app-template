@@ -1,0 +1,194 @@
+@use "~styles/app.scss" as *;
+
+.mediaLibraryFileSelect {
+    &__wrapper {
+        width: 320px;
+        max-width: 100%;
+
+        @include mobile {
+            width: 100%;
+        }
+    }
+
+    &__target {
+        min-width: 0;
+        text-align: left;
+
+        &[data-placeholder] {
+            color: $text-muted-color;
+        }
+    }
+
+    &__targetText {
+        display: block;
+        min-width: 0;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &__targetActions {
+        flex: 0 0 auto;
+        color: $text-muted-color;
+    }
+
+    &__clear {
+        width: 22px;
+        height: 22px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--mantine-radius-sm);
+        color: $text-muted-color;
+        cursor: pointer;
+        @include transition;
+
+        &:hover {
+            background: var(--mantine-color-gray-1);
+            color: $black-color;
+        }
+    }
+
+    &__dropdown {
+        max-width: 100%;
+        overflow: hidden;
+        padding: var(--mantine-spacing-xs);
+    }
+
+    &__scrollViewport {
+        overflow-x: hidden !important;
+    }
+
+    &__scrollContent {
+        width: 100%;
+        min-width: 0 !important;
+    }
+
+    &__list {
+        min-width: 0;
+        overflow: hidden;
+    }
+
+    &__breadcrumbs {
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    &__breadcrumb {
+        @include cutText(140px);
+
+        color: var(--mantine-color-indigo-7);
+        font-size: 13px;
+        line-height: 1.35;
+        font-weight: 600;
+        cursor: pointer;
+
+        &:disabled {
+            color: $text-muted-color;
+            cursor: default;
+        }
+    }
+
+    &__option {
+        width: 100%;
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px;
+        border-radius: var(--mantine-radius-sm);
+        color: inherit;
+        text-align: left;
+        cursor: pointer;
+        @include transition;
+
+        &:hover {
+            background: var(--mantine-color-gray-0);
+        }
+
+        &[data-disabled] {
+            cursor: not-allowed;
+            opacity: 0.48;
+        }
+
+        &[data-disabled]:hover {
+            background: transparent;
+        }
+
+        &[data-selected] {
+            background: var(--mantine-color-indigo-0);
+        }
+
+        &[data-highlighted] {
+            background: var(--mantine-color-teal-0);
+        }
+    }
+
+    &__loadingOption {
+        min-width: 0;
+        padding: 8px;
+    }
+
+    &__loadingText {
+        min-width: 0;
+        flex: 1 1 auto;
+    }
+
+    &__optionIcon {
+        flex: 0 0 34px;
+    }
+
+    &__optionText {
+        min-width: 0;
+        max-width: 100%;
+        flex: 1 1 auto;
+        overflow: hidden;
+    }
+
+    &__optionName {
+        max-width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
+        color: $black-color;
+        font-size: 14px;
+        line-height: 1.35;
+        font-weight: 700;
+    }
+
+    &__optionMeta {
+        max-width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
+        color: $text-muted-color;
+        font-size: 12px;
+        line-height: 1.35;
+    }
+
+    &__checkbox {
+        flex: 0 0 auto;
+        pointer-events: none;
+    }
+
+    &__check {
+        flex: 0 0 auto;
+        color: var(--mantine-color-teal-6);
+    }
+
+    &__folderStatus {
+        flex: 0 0 auto;
+        color: var(--mantine-color-teal-6);
+    }
+
+    &__empty {
+        padding: 16px 8px;
+        color: $text-muted-color;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 600;
+    }
+}

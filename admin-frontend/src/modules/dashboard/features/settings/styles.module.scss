@@ -1,0 +1,21 @@
+@use "~styles/app.scss" as *;
+
+.settingsDrawer {
+    &__title {
+        font-size: 20px;
+        font-weight: 800;
+        line-height: 1.2;
+    }
+
+    &__fieldset {
+        padding: 18px;
+
+        > legend {
+            padding: 0 8px;
+            color: $black-color;
+            font-size: 16px;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+    }
+}

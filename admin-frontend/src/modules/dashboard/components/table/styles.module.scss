@@ -1,0 +1,68 @@
+@use "~styles/app.scss" as *;
+
+.dashboardTable {
+    width: 100%;
+
+    &__table {
+        min-width: 760px;
+    }
+
+    &__actionsHeader,
+    &__actionsCell {
+        width: 56px;
+    }
+
+    &__empty {
+        min-height: 96px;
+    }
+
+    &__menuLabel {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &__pagination {
+        max-width: 100%;
+
+        @include mobile {
+            justify-content: center;
+            overflow-x: auto;
+            scrollbar-width: none;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+        }
+    }
+
+    &__paginationDesktop {
+        @include mobile {
+            display: none;
+        }
+    }
+
+    &__paginationMobile {
+        display: none;
+
+        @include mobile {
+            display: flex;
+            flex-wrap: nowrap;
+            width: max-content;
+            max-width: none;
+
+            :global(.mantine-Pagination-control) {
+                min-width: 32px;
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+
+            :global(.mantine-Pagination-dots) {
+                min-width: 20px;
+                width: 20px;
+            }
+        }
+    }
+}

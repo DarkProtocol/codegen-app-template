@@ -1,0 +1,52 @@
+@use "~styles/app.scss" as *;
+
+.createFile {
+    &__fieldLabel {
+        color: $black-color;
+        font-size: 14px;
+        line-height: 1.35;
+        font-weight: 600;
+    }
+
+    &__folderInput {
+        &:disabled,
+        &[data-disabled] {
+            color: $black-color;
+            background: $surface-color;
+            opacity: 1;
+            -webkit-text-fill-color: $black-color;
+        }
+    }
+
+    &__dropzoneContent {
+        min-height: 132px;
+        pointer-events: none;
+    }
+
+    &__dropzoneTitle {
+        color: $black-color;
+        font-size: 15px;
+        line-height: 1.35;
+        font-weight: 700;
+    }
+
+    &__dropzoneHint {
+        color: $text-muted-color;
+        font-size: 13px;
+        line-height: 1.35;
+    }
+
+    &__fieldError {
+        color: var(--mantine-color-error);
+        font-size: 12px;
+        line-height: 1.35;
+    }
+
+    &__selectedFile {
+        @include cutText(100%);
+
+        color: $text-muted-color;
+        font-size: 13px;
+        line-height: 1.35;
+    }
+}

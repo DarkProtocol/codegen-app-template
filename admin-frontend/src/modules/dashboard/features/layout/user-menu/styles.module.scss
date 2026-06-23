@@ -1,0 +1,60 @@
+@use "~styles/app.scss" as *;
+
+.userMenu {
+    flex: 0 0 auto;
+
+    &__trigger {
+        width: 58px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        border-radius: 8px;
+        color: $black-color;
+        cursor: pointer;
+        @include transition;
+
+        &[data-open="true"] {
+            .userMenu__chevron {
+                transform: rotate(180deg);
+            }
+        }
+    }
+
+    &__avatar {
+        flex: 0 0 auto;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    &__chevron {
+        color: $text-muted-color;
+        @include transition;
+    }
+
+    &__dropdown {
+        z-index: 1100;
+        padding: 6px;
+        border: 1px solid $border-color;
+        border-radius: 8px;
+        background: $surface-color;
+    }
+
+    &__item {
+        min-height: 38px;
+        padding: 9px 10px;
+        border-radius: 7px;
+        color: $black-color;
+        font-size: 15px;
+        line-height: 1.2;
+        font-weight: 500;
+        text-align: left;
+        cursor: pointer;
+        @include transition;
+
+        &:hover {
+            background: $gray-bg-color;
+        }
+    }
+}

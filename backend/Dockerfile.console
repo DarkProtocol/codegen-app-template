@@ -1,0 +1,42 @@
+FROM php:8.4-cli-alpine3.21
+
+RUN apk update --no-cache \
+    && apk add --no-cache \
+        autoconf \
+        bash \
+        g++ \
+        git \
+        icu-dev \
+        make \
+        nano \
+        openssh-client \
+        postgresql-dev \
+        linux-headers \
+    && docker-php-ext-install -j"$(nproc)" \
+        bcmath \
+        intl \
+        opcache \
+        pdo \
+        pdo_pgsql \
+        pgsql \
+        pcntl \
+        sockets \
+    && mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
+    && echo opcache.enable_cli=1 > "$PHP_INI_DIR/conf.d/opcache-cli.ini" \
+    && echo post_max_size=64M > "$PHP_INI_DIR/conf.d/post-max-size.ini"
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+WORKDIR /app
+COPY . .
+
+ENV COMPOSER_MEMORY_LIMIT=-1
+ENV PATH="./vendor/bin:${PATH}"
+
+RUN composer install --no-dev --optimize-autoloader --no-progress --no-interaction \
+    && mkdir -p /app/runtime \
+    && chown -R www-data:www-data /app/runtime \
+    && chmod -R 775 /app/runtime
+
+ENTRYPOINT ["php", "yii"]
+CMD ["--help"]

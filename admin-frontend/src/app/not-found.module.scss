@@ -1,0 +1,228 @@
+@use "~styles/app.scss" as *;
+
+.notFound {
+    min-height: 100dvh;
+    padding: 32px;
+    background:
+        linear-gradient(var(--mantine-color-gray-1) 1px, transparent 1px),
+        linear-gradient(90deg, var(--mantine-color-gray-1) 1px, transparent 1px),
+        $body-bg-color;
+    background-size: 44px 44px;
+    color: $black-color;
+
+    @include mobile {
+        padding: 20px 16px;
+    }
+
+    &__shell {
+        width: 100%;
+        max-width: 1120px;
+        min-height: calc(100dvh - 64px);
+        margin: 0 auto;
+        display: grid;
+        grid-template-rows: auto 1fr;
+        gap: 40px;
+
+        @include mobile {
+            min-height: calc(100dvh - 40px);
+            gap: 28px;
+        }
+    }
+
+    &__brand {
+        width: fit-content;
+        padding: 10px 14px;
+        border: 1px solid $border-color;
+        border-radius: 8px;
+        background: $surface-color;
+        box-shadow: 0 12px 34px rgba(15, 23, 42, 0.06);
+        font-size: 16px;
+        line-height: 1.2;
+        font-weight: 800;
+    }
+
+    &__content {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+        align-items: center;
+        gap: 48px;
+
+        @include tablet {
+            grid-template-columns: 1fr;
+            align-content: center;
+            gap: 32px;
+        }
+    }
+
+    &__copy {
+        min-width: 0;
+        max-width: 620px;
+    }
+
+    &__eyebrow {
+        color: var(--mantine-color-indigo-7);
+        font-size: 13px;
+        line-height: 1.2;
+        font-weight: 800;
+        letter-spacing: 0;
+        text-transform: uppercase;
+    }
+
+    &__title {
+        margin: 14px 0 0;
+        color: $black-color;
+        font-size: 48px;
+        line-height: 1.05;
+        font-weight: 800;
+
+        @include mobile {
+            font-size: 34px;
+        }
+    }
+
+    &__description {
+        max-width: 520px;
+        margin-top: 16px;
+        color: $text-muted-color;
+        font-size: 17px;
+        line-height: 1.55;
+
+        @include mobile {
+            font-size: 15px;
+        }
+    }
+
+    &__actions {
+        margin-top: 28px;
+    }
+
+    &__visual {
+        position: relative;
+        min-height: 360px;
+        overflow: hidden;
+        border: 1px solid $border-color;
+        border-radius: 14px;
+        background: $surface-color;
+        box-shadow: 0 24px 70px rgba(15, 23, 42, 0.1);
+
+        @include mobile {
+            min-height: 280px;
+        }
+    }
+
+    &__visualHeader {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 14px 16px;
+        border-bottom: 1px solid $border-color;
+        background: var(--mantine-color-gray-0);
+    }
+
+    &__status {
+        color: $text-muted-color;
+        font-size: 13px;
+        line-height: 1.2;
+        font-weight: 700;
+    }
+
+    &__dots {
+        display: flex;
+        gap: 6px;
+
+        span {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--mantine-color-gray-4);
+
+            &:nth-child(2) {
+                background: var(--mantine-color-indigo-4);
+            }
+
+            &:nth-child(3) {
+                background: var(--mantine-color-teal-4);
+            }
+        }
+    }
+
+    &__visualBody {
+        position: relative;
+        min-height: 304px;
+        display: grid;
+        place-items: center;
+        padding: 32px;
+
+        &::before {
+            position: absolute;
+            inset: 24px;
+            content: "";
+            border: 1px dashed var(--mantine-color-gray-3);
+            border-radius: 12px;
+        }
+    }
+
+    &__code {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: var(--mantine-color-indigo-8);
+        font-size: 112px;
+        line-height: 0.9;
+        font-weight: 800;
+
+        @include mobile {
+            font-size: 76px;
+        }
+    }
+
+    &__zero {
+        width: 92px;
+        height: 92px;
+        display: grid;
+        place-items: center;
+        border: 10px solid var(--mantine-color-indigo-6);
+        border-radius: 999px;
+        background: var(--mantine-color-indigo-0);
+
+        @include mobile {
+            width: 68px;
+            height: 68px;
+            border-width: 8px;
+        }
+    }
+
+    &__zeroIcon {
+        color: var(--mantine-color-indigo-7);
+    }
+
+    &__routeLine {
+        position: absolute;
+        right: 24px;
+        bottom: 24px;
+        left: 24px;
+        height: 46px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0 14px;
+        border: 1px solid $border-color;
+        border-radius: 8px;
+        background: var(--mantine-color-gray-0);
+        color: $text-muted-color;
+        font-size: 13px;
+        line-height: 1.2;
+        font-weight: 700;
+    }
+
+    &__routePill {
+        width: 9px;
+        height: 9px;
+        border-radius: 999px;
+        background: var(--mantine-color-red-5);
+        box-shadow: 0 0 0 5px var(--mantine-color-red-0);
+    }
+}

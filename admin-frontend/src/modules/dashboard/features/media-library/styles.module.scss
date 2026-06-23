@@ -1,0 +1,53 @@
+@use "~styles/app.scss" as *;
+
+.mediaLibrary {
+    &__actions {
+        flex: 0 0 auto;
+
+        @include mobile {
+            width: 100%;
+        }
+    }
+
+    &__action {
+        @include mobile {
+            width: 100%;
+        }
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+        gap: var(--mantine-spacing-md);
+        align-items: start;
+    }
+}
+
+.loadingCard {
+    height: auto;
+    min-width: 0;
+    align-self: start;
+    background: $surface-color;
+    pointer-events: none;
+
+    &__text {
+        min-width: 0;
+        flex: 1 1 auto;
+    }
+}
+
+.empty {
+    min-height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    text-align: center;
+    background: $surface-color;
+
+    &__title {
+        color: $text-muted-color;
+        font-size: 15px;
+        font-weight: 600;
+    }
+}

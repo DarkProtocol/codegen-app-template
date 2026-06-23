@@ -1,0 +1,71 @@
+@use "~styles/app.scss" as *;
+
+.folderPicker {
+    min-height: 180px;
+
+    &__loader {
+        min-height: 180px;
+    }
+
+    &__readonlyInput {
+        &:disabled,
+        &[data-disabled],
+        &[readonly] {
+            color: $black-color;
+            background: $surface-color;
+            opacity: 1;
+            -webkit-text-fill-color: $black-color;
+        }
+    }
+
+    &__item {
+        width: 100%;
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 10px 8px calc(8px + var(--folder-picker-level, 0) * 22px);
+        border-radius: 8px;
+        color: $black-color;
+        text-align: left;
+        @include transition;
+
+        &:hover {
+            background: var(--mantine-color-gray-0);
+        }
+
+        &[data-selected] {
+            background: var(--mantine-color-teal-0);
+            color: var(--mantine-color-teal-8);
+        }
+    }
+
+    &__chevron {
+        width: 16px;
+        height: 16px;
+        flex: 0 0 16px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: inherit;
+
+        &[data-hidden] {
+            visibility: hidden;
+        }
+    }
+
+    &__icon {
+        flex: 0 0 auto;
+    }
+
+    &__name {
+        @include cutText(100%);
+
+        min-width: 0;
+        flex: 1 1 auto;
+        color: inherit;
+        font-size: 14px;
+        line-height: 1.35;
+        font-weight: 600;
+    }
+}

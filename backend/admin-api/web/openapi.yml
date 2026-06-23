@@ -1,0 +1,827 @@
+openapi: 3.0.3
+info:
+  title: App Admin API
+  version: 1.0.0
+servers:
+  - url: /
+security:
+  - adminJwt: []
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login admin user
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '204':
+          description: Authenticated. Sets the adminJwt cookie.
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /auth/logout:
+    post:
+      tags:
+        - Auth
+      summary: Logout admin user
+      responses:
+        '204':
+          description: Logged out. Expires the adminJwt cookie.
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /account:
+    post:
+      tags:
+        - Account
+      summary: Change current admin account name
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeAccountRequest'
+      responses:
+        '200':
+          description: Account changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /account/password:
+    post:
+      tags:
+        - Account
+      summary: Change current admin password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+      responses:
+        '204':
+          description: Password changed.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /auth/whoami:
+    post:
+      tags:
+        - Auth
+      summary: Get current admin account
+      responses:
+        '200':
+          description: Current admin user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Whoami'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /admin-users/create:
+    post:
+      tags:
+        - Admin Users
+      summary: Create admin user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAdminUserRequest'
+      responses:
+        '201':
+          description: Admin user created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminUser'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /admin-users/ban/{id}:
+    post:
+      tags:
+        - Admin Users
+      summary: Ban admin user
+      parameters:
+        - $ref: '#/components/parameters/AdminUserId'
+      responses:
+        '204':
+          description: Admin user banned.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /admin-users/unban/{id}:
+    post:
+      tags:
+        - Admin Users
+      summary: Unban admin user
+      parameters:
+        - $ref: '#/components/parameters/AdminUserId'
+      responses:
+        '204':
+          description: Admin user unbanned.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /admin-users/password/{id}:
+    post:
+      tags:
+        - Admin Users
+      summary: Force change admin user password
+      parameters:
+        - $ref: '#/components/parameters/AdminUserId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+      responses:
+        '204':
+          description: Password reset.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /admin-users/list:
+    get:
+      tags:
+        - Admin Users
+      summary: List admin users
+      parameters:
+        - name: page
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+        - name: perPage
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+      responses:
+        '200':
+          description: Paginated admin users.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminUserList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /admin-users/roles:
+    get:
+      tags:
+        - Admin Users
+      summary: List available admin user roles
+      responses:
+        '200':
+          description: Available admin user roles.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminUserRoleList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /admin/media/config:
+    get:
+      tags:
+        - Admin Media
+      summary: Get media library upload config
+      responses:
+        '200':
+          description: Media library config.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminMediaConfig'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /admin/media/folders:
+    get:
+      tags:
+        - Admin Media
+      summary: Get folder content
+      parameters:
+        - name: parentId
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uuid
+            nullable: true
+      responses:
+        '200':
+          description: Folder content.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminMediaFolderContent'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+    post:
+      tags:
+        - Admin Media
+      summary: Create folder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAdminMediaFolderRequest'
+      responses:
+        '201':
+          description: Folder created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminMediaFolder'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /admin/media/folders/{id}:
+    patch:
+      tags:
+        - Admin Media
+      summary: Change folder
+      parameters:
+        - $ref: '#/components/parameters/AdminMediaId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeAdminMediaFolderRequest'
+      responses:
+        '204':
+          description: Folder changed.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+    delete:
+      tags:
+        - Admin Media
+      summary: Delete folder
+      parameters:
+        - $ref: '#/components/parameters/AdminMediaId'
+      responses:
+        '204':
+          description: Folder deleted.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /admin/media/files:
+    post:
+      tags:
+        - Admin Media
+      summary: Create file
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateAdminMediaFileRequest'
+      responses:
+        '201':
+          description: File created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminMediaFile'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /admin/media/files/{id}:
+    patch:
+      tags:
+        - Admin Media
+      summary: Change file
+      parameters:
+        - $ref: '#/components/parameters/AdminMediaId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeAdminMediaFileRequest'
+      responses:
+        '204':
+          description: File changed.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+    delete:
+      tags:
+        - Admin Media
+      summary: Delete file
+      parameters:
+        - $ref: '#/components/parameters/AdminMediaId'
+      responses:
+        '204':
+          description: File deleted.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /uploads/{id}:
+    get:
+      tags:
+        - Admin Media
+      summary: Download media file
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/AdminMediaId'
+      responses:
+        '200':
+          description: File content.
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  securitySchemes:
+    adminJwt:
+      type: apiKey
+      in: cookie
+      name: adminJwt
+  parameters:
+    AdminUserId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    AdminMediaId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+          minLength: 1
+    ChangeAccountRequest:
+      type: object
+      required:
+        - firstName
+      properties:
+        firstName:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          nullable: true
+    ChangePasswordRequest:
+      type: object
+      required:
+        - currentPassword
+        - password
+      properties:
+        currentPassword:
+          type: string
+          format: password
+          minLength: 1
+        password:
+          type: string
+          format: password
+          minLength: 6
+    ResetPasswordRequest:
+      type: object
+      required:
+        - password
+      properties:
+        password:
+          type: string
+          format: password
+          minLength: 6
+    CreateAdminUserRequest:
+      type: object
+      required:
+        - email
+        - firstName
+        - password
+        - role
+      properties:
+        email:
+          type: string
+          format: email
+        firstName:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          nullable: true
+        password:
+          type: string
+          format: password
+          minLength: 6
+        role:
+          $ref: '#/components/schemas/AdminUserRole'
+    AdminUserRole:
+      type: string
+      enum:
+        - admin
+        - editor
+    AdminUserRoleOption:
+      type: object
+      required:
+        - value
+        - label
+      properties:
+        value:
+          $ref: '#/components/schemas/AdminUserRole'
+        label:
+          type: string
+    AdminUserRoleList:
+      type: array
+      items:
+        $ref: '#/components/schemas/AdminUserRoleOption'
+    Account:
+      type: object
+      required:
+        - id
+        - email
+        - firstName
+        - lastName
+        - role
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        firstName:
+          type: string
+        lastName:
+          type: string
+          nullable: true
+        role:
+          $ref: '#/components/schemas/AdminUserRole'
+    Whoami:
+      type: object
+      required:
+        - account
+        - can
+      properties:
+        account:
+          $ref: '#/components/schemas/Account'
+        can:
+          $ref: '#/components/schemas/AdminPermissions'
+    AdminPermissions:
+      type: object
+      required:
+        - adminUsers
+        - adminMedia
+      properties:
+        adminUsers:
+          type: boolean
+        adminMedia:
+          type: boolean
+    AdminUser:
+      allOf:
+        - $ref: '#/components/schemas/Account'
+        - type: object
+          required:
+            - createdAt
+            - updatedAt
+            - bannedAt
+          properties:
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+            bannedAt:
+              type: string
+              format: date-time
+              nullable: true
+    AdminUserList:
+      type: object
+      required:
+        - data
+        - count
+        - currentPage
+        - perPage
+        - pages
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminUser'
+        count:
+          type: integer
+          minimum: 0
+        currentPage:
+          type: integer
+          minimum: 1
+        perPage:
+          type: integer
+          minimum: 1
+        pages:
+          type: integer
+          minimum: 0
+    AdminMediaConfig:
+      type: object
+      required:
+        - maxFileSize
+        - supportedExtensions
+      properties:
+        maxFileSize:
+          type: integer
+          minimum: 1
+        supportedExtensions:
+          type: array
+          items:
+            type: string
+    AdminMediaFolderContent:
+      type: object
+      required:
+        - currentFolder
+        - parents
+        - folders
+        - files
+      properties:
+        currentFolder:
+          nullable: true
+          oneOf:
+            - $ref: '#/components/schemas/AdminMediaCurrentFolder'
+        parents:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminMediaFolderParent'
+        folders:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminMediaFolder'
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminMediaFile'
+    AdminMediaFolderBase:
+      type: object
+      required:
+        - id
+        - parentId
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+        parentId:
+          type: string
+          format: uuid
+          nullable: true
+        name:
+          type: string
+    AdminMediaFolderParent:
+      allOf:
+        - $ref: '#/components/schemas/AdminMediaFolderBase'
+    AdminMediaCurrentFolder:
+      allOf:
+        - $ref: '#/components/schemas/AdminMediaFolderBase'
+        - type: object
+          required:
+            - createdBy
+            - createdAt
+            - updatedAt
+          properties:
+            createdBy:
+              type: string
+              format: uuid
+              nullable: true
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+    AdminMediaFolder:
+      allOf:
+        - $ref: '#/components/schemas/AdminMediaCurrentFolder'
+        - type: object
+          required:
+            - foldersCount
+            - filesCount
+          properties:
+            foldersCount:
+              type: integer
+              minimum: 0
+            filesCount:
+              type: integer
+              minimum: 0
+    AdminMediaFile:
+      type: object
+      required:
+        - id
+        - publicUrl
+        - folderId
+        - originalName
+        - name
+        - extension
+        - mimeType
+        - size
+        - checksum
+        - isPublic
+        - createdBy
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        publicUrl:
+          type: string
+          format: uri
+        folderId:
+          type: string
+          format: uuid
+          nullable: true
+        originalName:
+          type: string
+        name:
+          type: string
+        extension:
+          type: string
+        mimeType:
+          type: string
+        size:
+          type: integer
+          minimum: 0
+        checksum:
+          type: string
+        isPublic:
+          type: boolean
+        createdBy:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+    CreateAdminMediaFolderRequest:
+      type: object
+      required:
+        - name
+      properties:
+        parentId:
+          type: string
+          format: uuid
+          nullable: true
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+    ChangeAdminMediaFolderRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+    CreateAdminMediaFileRequest:
+      type: object
+      required:
+        - file
+        - name
+      properties:
+        folderId:
+          type: string
+          format: uuid
+          nullable: true
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        file:
+          type: string
+          format: binary
+        isPublic:
+          type: boolean
+          default: false
+    ChangeAdminMediaFileRequest:
+      type: object
+      required:
+        - name
+      properties:
+        folderId:
+          type: string
+          format: uuid
+          nullable: true
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+    ValidationErrorResponse:
+      type: object
+      required:
+        - errors
+      properties:
+        errors:
+          type: object
+          additionalProperties:
+            type: string
+  responses:
+    Unauthorized:
+      description: Authentication is required.
+    Forbidden:
+      description: Access is forbidden.
+    NotFound:
+      description: Resource was not found.
+    ValidationError:
+      description: Request validation failed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorResponse'

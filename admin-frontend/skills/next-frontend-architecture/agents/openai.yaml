@@ -1,0 +1,4 @@
+interface:
+  display_name: "Next Frontend Architecture"
+  short_description: "Modular architecture rules for Next frontend"
+  default_prompt: "Use $next-frontend-architecture to implement a Next.js frontend change within the modular architecture."

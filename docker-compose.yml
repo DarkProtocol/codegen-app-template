@@ -1,0 +1,114 @@
+---
+networks:
+  traefik:
+    name: traefik
+  app:
+
+volumes:
+  pg_data:
+  queuedata:
+
+services:
+  traefik:
+    image: traefik:v3.3
+    container_name: app-traefik
+    command:
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --providers.docker.network=traefik
+      - --entrypoints.web.address=:80
+      - --api.dashboard=true
+      - --api.insecure=true
+    ports:
+      - "80:80"
+      - "8081:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - traefik
+  backend:
+    container_name: app-backend
+    depends_on:
+      - postgres
+      - redis
+    image: app-backend-admin-api:dev
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.admin-api
+    env_file:
+      - ./backend/.env
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: traefik
+      traefik.http.routers.app-backend.rule: Host(`admin-api.app.test`)
+      traefik.http.routers.app-backend.middlewares: app-backend-cors@docker
+      traefik.http.services.app-backend.loadbalancer.server.port: 8080
+      traefik.http.middlewares.app-backend-cors.headers.accessControlAllowMethods: GET,OPTIONS,PUT,POST,DELETE,PATCH
+      traefik.http.middlewares.app-backend-cors.headers.accessControlAllowHeaders: "Accept,Accept-Language,Content-Language,Content-Type,Origin,X-Requested-With,Authorization"
+      traefik.http.middlewares.app-backend-cors.headers.accessControlAllowOriginList: "http://admin.app.test:3000,http://admin.app.test:3001,http://localhost:3000,http://localhost:3001,http://127.0.0.1:3000,http://127.0.0.1:3001"
+      traefik.http.middlewares.app-backend-cors.headers.accessControlAllowCredentials: "true"
+      traefik.http.middlewares.app-backend-cors.headers.accessControlMaxAge: 100
+      traefik.http.middlewares.app-backend-cors.headers.addVaryHeader: "true"
+    volumes:
+      - ./backend:/app:rw
+      - ./backend/docker/nginx/admin-api.conf:/etc/nginx/http.d/default.conf:ro
+    tty: true
+    networks:
+      - traefik
+      - app
+  backend-console:
+    container_name: app-backend-console
+    profiles:
+      - tools
+    depends_on:
+      - postgres
+      - redis
+    image: app-backend-console:dev
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.console
+    env_file:
+      - ./backend/.env
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./backend:/app:rw
+    tty: true
+    networks:
+      - app
+  postgres:
+    image: postgres:17.4-alpine
+    container_name: app-db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db
+    ports:
+      - '7891:5432'
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      - app
+  redis:
+    image: redis:7.2.5-alpine
+    container_name: app-redis
+    command: /bin/sh -c "redis-server --requirepass password"
+    ports:
+      - '7892:6379'
+    networks:
+      - app
+  queue:
+    image: rabbitmq:management
+    container_name: app-queue
+    ports:
+      - "15893:15672"
+      - "7893:5672"
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+    volumes:
+      - queuedata:/var/lib/rabbitmq
+    networks:
+      - app

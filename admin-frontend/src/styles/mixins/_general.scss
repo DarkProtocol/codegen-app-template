@@ -1,0 +1,46 @@
+@use '../variables/variables' as *;
+
+@mixin transition() {
+    transition: all 0.15s cubic-bezier(0.39, 0.58, 0.57, 1);
+}
+
+// Breakpoints
+
+@mixin mobile-small {
+    @media (max-width: #{$screen-mobile-small}) {
+        @content;
+    }
+}
+@mixin mobile {
+    @media (max-width: #{$screen-mobile}) {
+        @content;
+    }
+}
+@mixin tablet {
+    @media (max-width: #{$screen-tablet}) {
+        @content;
+    }
+}
+@mixin desktop-small {
+    @media (max-width: #{$screen-desktop-small}) {
+        @content;
+    }
+}
+@mixin desktop {
+    @media (min-width: #{$screen-desktop}) {
+        @content;
+    }
+}
+
+@mixin maxWidth($width) {
+    @media (max-width: #{$width}) {
+        @content;
+    }
+}
+
+@mixin cutText($maxWidth) {
+    max-width: $maxWidth;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

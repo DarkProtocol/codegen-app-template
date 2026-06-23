@@ -1,0 +1,12 @@
+.login {
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.formCard {
+    width: min(100%, 430px);
+    padding: clamp(24px, 4vw, 40px);
+    box-shadow: var(--mantine-shadow-lg);
+}

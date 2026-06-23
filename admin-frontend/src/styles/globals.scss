@@ -1,0 +1,77 @@
+@use "~styles/app.scss" as *;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-feature-settings:
+        "liga" off,
+        "clig" off;
+    font-family: inherit;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    background-color: $body-bg-color;
+    color: $black-color;
+    font-weight: 400;
+    padding: 0;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-feature-settings:
+        "liga" off,
+        "clig" off;
+}
+
+form {
+    display: block;
+}
+
+button {
+    outline: none;
+    background: none;
+    border: 0;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.scrollbar {
+    &::-webkit-scrollbar {
+        width: 2px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: $gray-bg-color;
+        border-radius: 2px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: var(--mantine-color-gray-6);
+        border-radius: 2px;
+    }
+}
+
+/* hide number input arrows */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+nextjs-portal {
+    // next js errors hide
+    display: none;
+}

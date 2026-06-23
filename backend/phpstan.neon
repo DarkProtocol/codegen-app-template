@@ -1,0 +1,19 @@
+parameters:
+    level: 5
+    paths:
+        - admin-api/src
+        - admin-api/web/index.php
+        - common/src
+        - console/src
+        - yii
+    bootstrapFiles:
+        - vendor/autoload.php
+    tmpDir: runtime/cache/phpstan
+    ignoreErrors:
+        # Yii ActiveRecord query methods are not generic for PHPStan and return
+        # array|ActiveRecordInterface even when querying a concrete model.
+        -
+            identifier: return.type
+            message: '#^Method Common\\App\\Repository\\.+Repository::.+\(\) should return .+ but returns (?:array\|Yiisoft\\ActiveRecord\\ActiveRecordInterface\|null|array<array\|Yiisoft\\ActiveRecord\\ActiveRecordInterface>)\.$#'
+            paths:
+                - common/src/App/Repository/*Repository.php

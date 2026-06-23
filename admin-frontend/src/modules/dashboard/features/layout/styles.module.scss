@@ -1,0 +1,75 @@
+@use "~styles/app.scss" as *;
+
+.layout {
+    min-height: 100dvh;
+    background: $body-bg-color;
+
+    &__header {
+        position: relative;
+        z-index: 1003;
+        background: $surface-color;
+        border-bottom: 1px solid $border-color;
+    }
+
+    &__headerInner {
+        min-width: 0;
+        padding: 0 24px;
+
+        @include mobile {
+            display: grid;
+            grid-template-columns: 44px minmax(0, 1fr) 52px;
+            padding: 14px 16px;
+        }
+    }
+
+    &__brandLink {
+        min-width: 0;
+        text-decoration: none;
+        color: $black-color;
+
+        @include mobile {
+            justify-self: center;
+        }
+    }
+
+    &__brand {
+        min-width: 0;
+        font-size: 20px;
+        line-height: 1.2;
+        color: $black-color;
+
+        @include mobile {
+            font-size: 18px;
+        }
+    }
+
+    &__brandName {
+        @include cutText(280px);
+
+        font-weight: 700;
+
+        @include mobile {
+            max-width: calc(100vw - 112px);
+        }
+    }
+    
+    &__sidebar {
+        min-width: 0;
+        padding: 24px 18px;
+        background: $surface-color;
+        border-right: 1px solid $border-color;
+    }
+
+    &__main {
+        min-width: 0;
+        background: $body-bg-color;
+    }
+
+    &__mainInner {
+        padding: 32px;
+
+        @include mobile {
+            padding: 20px 16px;
+        }
+    }
+}

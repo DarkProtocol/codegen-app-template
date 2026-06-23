@@ -1,0 +1,72 @@
+@use "~styles/app.scss" as *;
+
+.editFile {
+    &__folderRow {
+        @include mobile {
+            align-items: stretch;
+            flex-direction: column;
+        }
+    }
+
+    &__folderInput {
+        min-width: 0;
+        flex: 1 1 auto;
+    }
+
+    &__folderInputElement {
+        text-overflow: ellipsis;
+    }
+
+    &__folderTooltip {
+        overflow-wrap: anywhere;
+    }
+
+    &__folderButton {
+        flex: 0 0 auto;
+    }
+
+    &__readonlyInput {
+        &:disabled,
+        &[data-disabled],
+        &[readonly] {
+            color: $black-color;
+            background: $surface-color;
+            opacity: 1;
+            -webkit-text-fill-color: $black-color;
+        }
+    }
+
+    &__sectionTitle {
+        color: $black-color;
+        font-size: 15px;
+        line-height: 1.35;
+        font-weight: 700;
+    }
+
+    &__metaItem {
+        min-width: 0;
+        padding: 10px 12px;
+        border: 1px solid var(--mantine-color-gray-2);
+        border-radius: 8px;
+        background: $surface-color;
+    }
+
+    &__metaLabel {
+        color: $text-muted-color;
+        font-size: 12px;
+        line-height: 1.35;
+    }
+
+    &__metaValue {
+        @include cutText(100%);
+
+        color: $black-color;
+        font-size: 13px;
+        line-height: 1.35;
+        font-weight: 600;
+    }
+
+    &__metaTooltip {
+        word-break: break-all;
+    }
+}

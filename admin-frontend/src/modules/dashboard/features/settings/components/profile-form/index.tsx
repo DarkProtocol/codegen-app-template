@@ -34,6 +34,7 @@ export function SettingsProfileForm({ onSuccess }: Props) {
         useChangeAccountMutation()
     const form = useForm<ProfileFormValues>({
         initialValues,
+        onValuesChange: () => resetChangeAccount(),
         validate: {
             firstName: (value) => (value.trim().length > 0 ? null : sharedT('requiredField')),
         },

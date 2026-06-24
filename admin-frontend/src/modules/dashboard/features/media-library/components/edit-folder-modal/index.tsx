@@ -29,6 +29,7 @@ export function EditFolderModal({ opened, folder, onClose, reloadFolder }: Props
         initialValues: {
             name: '',
         },
+        onValuesChange: () => resetChangeFolder(),
         validate: {
             name: (value) => (value.trim().length > 0 ? null : sharedT('requiredField')),
         },

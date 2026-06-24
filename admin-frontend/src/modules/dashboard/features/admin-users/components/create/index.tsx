@@ -46,6 +46,7 @@ export function AdminUserCreateModal({ opened, roles, loadingRoles, onClose, onC
         useCreateAdminUserMutation()
     const form = useForm<CreateAdminUserFormValues>({
         initialValues,
+        onValuesChange: () => resetCreateAdminUser(),
         validate: {
             firstName: (value) => (value.trim().length > 0 ? null : sharedT('requiredField')),
             email: (value) => {

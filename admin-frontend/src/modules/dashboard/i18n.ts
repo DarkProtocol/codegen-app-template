@@ -43,6 +43,7 @@ export const i18n = {
                     confirmPasswordLabel: 'Повтор нового пароля',
                     confirmPasswordPlaceholder: 'Повторите новый пароль',
                     submit: 'Сохранить пароль',
+                    successMessage: 'Пароль обновлён',
                 },
             },
             AdminUsers: {
@@ -259,6 +260,7 @@ export const i18n = {
                     confirmPasswordLabel: 'Confirm new password',
                     confirmPasswordPlaceholder: 'Repeat new password',
                     submit: 'Save password',
+                    successMessage: 'Password updated',
                 },
             },
             AdminUsers: {

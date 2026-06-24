@@ -50,6 +50,7 @@ export function CreateFileModal({ opened, currentFolder, folderPath, onClose, re
     const supportedExtensions = getSupportedExtensions(config?.supportedExtensions)
     const form = useForm<CreateFileFormValues>({
         initialValues,
+        onValuesChange: () => resetCreateFile(),
         validate: {
             name: (value) => (value.trim().length > 0 ? null : sharedT('requiredField')),
             file: (file) => getFileValidationError(file, config?.maxFileSize, t),

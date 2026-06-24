@@ -39,6 +39,7 @@ export function ChangeRoleModal({ opened, user, roles, loadingRoles, listParams,
         useChangeAdminUserRoleMutation()
     const form = useForm<ChangeRoleFormValues>({
         initialValues,
+        onValuesChange: () => resetChangeRole(),
         validate: {
             role: (value) => (value.length > 0 ? null : sharedT('requiredField')),
         },

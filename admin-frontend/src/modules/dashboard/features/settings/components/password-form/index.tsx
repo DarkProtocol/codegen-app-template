@@ -1,7 +1,10 @@
 'use client'
 
-import { Button, Fieldset, Group, Stack } from '@mantine/core'
+import { Alert, Button, Fieldset, Group, Stack, Text } from '@mantine/core'
 import { useForm } from '@mantine/form'
+import { useTimeout } from '@mantine/hooks'
+import { CircleCheck } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 
 import { FormRootError } from '@modules/shared/components/form-root-error'
@@ -32,8 +35,15 @@ export function SettingsPasswordForm({ onSuccess }: Props) {
     const sharedT = useTranslations('Shared.Validation')
     const [changePassword, { isLoading: isSubmitting, error: changePasswordError, reset: resetChangePassword }] =
         useChangePasswordMutation()
+    const [showSuccess, setShowSuccess] = useState(false)
+    const successTimeout = useTimeout(() => setShowSuccess(false), 2000)
     const form = useForm<PasswordFormValues>({
         initialValues,
+        onValuesChange: () => {
+            resetChangePassword()
+            successTimeout.clear()
+            setShowSuccess(false)
+        },
         validate: {
             currentPassword: (value) => (value.length > 0 ? null : sharedT('requiredField')),
             newPassword: (value) => (value.length >= 6 ? null : sharedT('passwordMinLength')),
@@ -52,6 +62,7 @@ export function SettingsPasswordForm({ onSuccess }: Props) {
     const handleSubmit = async (values: PasswordFormValues) => {
         form.clearErrors()
         resetChangePassword()
+        setShowSuccess(false)
 
         try {
             await changePassword({
@@ -59,6 +70,8 @@ export function SettingsPasswordForm({ onSuccess }: Props) {
                 password: values.newPassword,
             }).unwrap()
             form.reset()
+            setShowSuccess(true)
+            successTimeout.start()
             onSuccess?.()
         } catch {
             // Field and root errors are mapped by useApiFormErrors.
@@ -92,6 +105,17 @@ export function SettingsPasswordForm({ onSuccess }: Props) {
                     />
 
                     <FormRootError error={form.errors.root} />
+
+                    {showSuccess && (
+                        <Alert color="teal" variant="light" radius="md" py="xs">
+                            <Group justify="center" gap={6}>
+                                <CircleCheck size={16} strokeWidth={2} />
+                                <Text size="sm" fw={600}>
+                                    {t('successMessage')}
+                                </Text>
+                            </Group>
+                        </Alert>
+                    )}
 
                     <Group justify="flex-end">
                         <Button type="submit" loading={isSubmitting}>

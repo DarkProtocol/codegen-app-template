@@ -48,6 +48,7 @@ export function EditFileModal({ opened, file, folderPath, onClose, reloadFolder 
     const { download, isDownloading } = useDownload()
     const form = useForm<EditFileFormValues>({
         initialValues,
+        onValuesChange: () => resetChangeFile(),
         validate: {
             name: (value) => (value.trim().length > 0 ? null : sharedT('requiredField')),
         },

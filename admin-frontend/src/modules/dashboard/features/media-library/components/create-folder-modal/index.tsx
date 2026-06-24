@@ -30,6 +30,7 @@ export function CreateFolderModal({ opened, currentFolder, onClose, reloadFolder
         useCreateMediaLibraryFolderMutation()
     const form = useForm<CreateFolderFormValues>({
         initialValues,
+        onValuesChange: () => resetCreateFolder(),
         validate: {
             name: (value) => (value.trim().length > 0 ? null : sharedT('requiredField')),
         },

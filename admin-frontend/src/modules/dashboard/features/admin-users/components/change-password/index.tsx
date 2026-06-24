@@ -34,6 +34,7 @@ export function ChangePasswordModal({ opened, user, onClose }: Props) {
         useResetAdminUserPasswordMutation()
     const form = useForm<ChangePasswordFormValues>({
         initialValues,
+        onValuesChange: () => resetPassword(),
         validate: {
             newPassword: (value) => (value.length >= 6 ? null : sharedT('passwordMinLength')),
             confirmPassword: (value, values) => {

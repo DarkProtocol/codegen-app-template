@@ -44,7 +44,7 @@ export function DashboardLayout({ appName, children }: Props) {
                 <Menu />
             </AppShell.Navbar>
 
-            <AppShell.Main className={styles.layout__main} pt={0}>
+            <AppShell.Main className={styles.layout__main}>
                 <Box className={styles.layout__mainInner}>{children}</Box>
             </AppShell.Main>
         </AppShell>
